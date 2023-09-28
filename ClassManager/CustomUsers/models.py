@@ -24,7 +24,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.CharField(unique=True, max_length=50)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
-    phone_number = PhoneNumberField(null=True, blank=True)
+    phone_number = PhoneNumberField(null=True, blank=True, unique=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True)
     # user_permissions = models.OneToOneField(CustomUserPermission, on_delete=models.CASCADE, null=True, blank=True)
     #############################################################################

@@ -37,3 +37,15 @@ class ShowCustomUser(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     lookup_field = 'id'
+
+class UpdateCustomUser(generics.UpdateAPIView):
+    # permission_classes = [IsEditUser]
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+
+
+class DeleteCustomUser(generics.DestroyAPIView):
+    # permission_classes = [IsEditUser]
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
