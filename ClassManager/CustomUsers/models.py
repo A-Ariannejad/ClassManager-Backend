@@ -47,7 +47,7 @@ class LogicUser:
     def get_user(request):
         user = None
         try:
-            email = request.user.email
+            email = request.user.username
             user = CustomUser.objects.get(email=email)
         except:
             pass

@@ -2,7 +2,8 @@ from django.db import models
 from CustomUsers.models import CustomUser
 
 class CustomClass(models.Model):
-    name = models.TextField(max_length=50)
+    name = models.CharField(max_length=30, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='taught_classes')
     CATEGORIES = (
         ('other', 'Other'),
