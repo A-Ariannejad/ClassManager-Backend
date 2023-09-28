@@ -3,14 +3,14 @@ from CustomUsers.models import CustomUser
 
 class CustomClass(models.Model):
     name = models.TextField(max_length=50)
-    teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='taught_classes')
     CATEGORIES = (
         ('other', 'Other'),
         ('cloth', 'Cloth'),
         ('laptop', 'Laptop'),
         ('mobile', 'Mobile'),
         ('electronic', 'Electronic'),
-        ('furniture', 'furniture')
+        ('furniture', 'Furniture')
     )
     category = models.CharField(max_length=20, choices=CATEGORIES, default='other')
     description = models.TextField(null=True, blank=True)

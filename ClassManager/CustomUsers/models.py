@@ -2,7 +2,6 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from CustomUserPermissions.models import CustomUserPermission
-from CustomClasses.models import CustomClass, ClassMTMStudent
 import jwt
 
 class UserManager(BaseUserManager):
@@ -28,7 +27,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = PhoneNumberField(null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True)
     user_permissions = models.OneToOneField(CustomUserPermission, on_delete=models.CASCADE, null=True, blank=True)
-    custom_classes = models.ManyToManyField(CustomClass, blank=True, through=ClassMTMStudent)
     #############################################################################
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
