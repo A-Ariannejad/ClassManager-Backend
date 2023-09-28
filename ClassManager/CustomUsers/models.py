@@ -15,7 +15,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('user_permissions', CustomUserPermission.objects.create(edit_Groups=True, edit_Users=True, edit_Ship=True))
+        extra_fields.setdefault('user_permissions', CustomUserPermission.objects.create(Is_Teacher=True, Is_Student=True))
         return self.create_user(username, password, **extra_fields)
 
 
