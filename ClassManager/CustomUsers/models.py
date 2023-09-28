@@ -16,7 +16,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('user_permissions', CustomUserPermission.objects.create(Is_Teacher=True, Is_Student=True))
+        extra_fields.setdefault('user_permissions', CustomUserPermission.objects.create(is_Teacher=True, is_Student=True))
         return self.create_user(email, password, **extra_fields)
 
 
@@ -24,9 +24,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.CharField(unique=True, max_length=50)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
-    phone_number = PhoneNumberField(null=True, blank=True)
+    phone_number = PhoneNumberField(null=True, blank=True, unique=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True)
-    user_permissions = models.OneToOneField(CustomUserPermission, on_delete=models.CASCADE, null=True, blank=True)
+    # user_permissions = models.OneToOneField(CustomUserPermission, on_delete=models.CASCADE, null=True, blank=True)
     #############################################################################
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
