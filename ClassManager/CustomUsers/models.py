@@ -1,29 +1,31 @@
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from CustomUserPermissions.models import CustomUserPermission
 import jwt
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password=None, **extra_fields):
-        if not username:
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
             raise ValueError('The Username field must be set')
-        user = self.model(username=username, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password=None, **extra_fields):
+    def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('user_permissions', CustomUserPermission.objects.create(Is_Teacher=True, Is_Student=True))
-        return self.create_user(username, password, **extra_fields)
+        return self.create_user(email, password, **extra_fields)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(unique=True, max_length=50)
+    email = models.CharField(unique=True, max_length=50)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
-    create_date = models.DateTimeField(auto_now_add=True)
+    phone_number = PhoneNumberField(null=True, blank=True)
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True)
     user_permissions = models.OneToOneField(CustomUserPermission, on_delete=models.CASCADE, null=True, blank=True)
     #############################################################################
     is_active = models.BooleanField(default=True)
@@ -31,7 +33,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     #############################################################################
     objects = UserManager()
 
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     class Meta:
@@ -45,8 +47,8 @@ class LogicUser:
     def get_user(request):
         user = None
         try:
-            username = request.user.username
-            user = CustomUser.objects.get(username=username)
+            email = request.user.email
+            user = CustomUser.objects.get(email=email)
         except:
             pass
         return user
