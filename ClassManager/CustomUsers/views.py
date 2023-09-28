@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, permissions, viewsets, status
 from rest_framework.response import Response
 from .models import CustomUser
-from .serializers import CustomUserSerializer, LoginSignupCustomUserSerializer
+from .serializers import CustomUserSerializer, LoginSignupCustomUserSerializer, UpdateCustomUserSerializer
 from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
@@ -41,11 +41,26 @@ class ShowCustomUser(generics.RetrieveAPIView):
 class UpdateCustomUser(generics.UpdateAPIView):
     # permission_classes = [IsEditUser]
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+    serializer_class = UpdateCustomUserSerializer
 
+    def perform_update(self, serializer):
+        instance = serializer.instance
+        email = self.request.user
+        user = CustomUser.objects.get(email=email)
+        if user != instance:
+            print(instance , user)
+            return Response({'error': 'User Not Allowed.'}, status=status.HTTP_403_FORBIDDEN)
+        serializer.save()
 
 
 class DeleteCustomUser(generics.DestroyAPIView):
     # permission_classes = [IsEditUser]
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+    def perform_destroy(self, instance):
+        email = self.request.user
+        user = CustomUser.objects.get(email=email)
+        if user != instance:
+            return Response({'error': 'User Not Allowed.'}, status=status.HTTP_403_FORBIDDEN)
+        instance.delete()

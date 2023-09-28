@@ -15,7 +15,7 @@ class CustomClass(models.Model):
     )
     category = models.CharField(max_length=20, choices=CATEGORIES, default='other')
     description = models.TextField(null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField()
     students = models.ManyToManyField(CustomUser, blank=True, through='ClassMTMStudent')
 
 class ClassMTMStudent(models.Model):
